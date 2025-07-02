@@ -30,8 +30,12 @@ export default function TournamentCard({tournament, token}: Props) {
       const response = await fetch(`https://bcp-server.onrender.com/api/lists?id=${tournament.id}&token=${encodeURIComponent(token)}`)
       const data = await response.json()
       generateRostersPDF(data, tournament.name)
-    } catch (err: Error) {
-      console.error(String(err?.message || ''))
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(err.message);
+      } else {
+        console.error('Неизвестная ошибка');
+      }
     } finally {
       setLoading(false)
       setSeftSeconds(0)
