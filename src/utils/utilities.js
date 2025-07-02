@@ -1,6 +1,6 @@
 import {jsPDF} from "jspdf"
 
-export const generateRostersPDF = (data, name) => {
+export const generateRostersPDF = (data: any, name: string) => {
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',

@@ -1,12 +1,17 @@
 import {useState} from 'react'
 import {generateRostersPDF} from '../utils/utilities'
 
-export default function TournamentCard({tournament, token}) {
+type Props = {
+  tournament: any,
+  token: string
+}
+
+export default function TournamentCard({tournament, token}: Props) {
   const [loading, setLoading] = useState(false)
   const [leftSeconds, setSeftSeconds] = useState(0)
-  let countdownInterval
+  let countdownInterval: any
 
-  const startCountdown = (seconds) => {
+  const startCountdown = (seconds: number) => {
     let timeLeft = seconds
     countdownInterval = setInterval(() => {
       timeLeft--
@@ -23,10 +28,6 @@ export default function TournamentCard({tournament, token}) {
     startCountdown(tournament.players * 3)
     try {
       const response = await fetch(`https://bcp-server.onrender.com/api/lists?id=${tournament.id}&token=${encodeURIComponent(token)}`)
-      if (!response.ok) {
-        const errData = await response.json()
-        throw new Error(JSON.stringify(errData))
-      }
       const data = await response.json()
       generateRostersPDF(data, tournament.name)
     } catch (err) {
