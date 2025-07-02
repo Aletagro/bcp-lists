@@ -31,7 +31,7 @@ export default function TournamentCard({tournament, token}: Props) {
       const data = await response.json()
       generateRostersPDF(data, tournament.name)
     } catch (err) {
-      console.error(err.message)
+      console.error(String(err?.message || ''))
     } finally {
       setLoading(false)
       setSeftSeconds(0)
@@ -61,5 +61,5 @@ const Styles = {
     boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
   },
   p: {marginBottom: 12, marginTop: 0},
-  button: {backgroundColor: 'lightblue'}
+  button: {backgroundColor: 'lightblue', color: 'black'}
 }

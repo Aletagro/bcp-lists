@@ -23,7 +23,7 @@ function App() {
       const data = await response.json()
       setTournaments(data || [])
     } catch (err) {
-      setError(`Ошибка: ${String(err.message)}`)
+      setError(`Ошибка: ${String(err?.message || '')}`)
     } finally {
       setLoading(false)
     }
