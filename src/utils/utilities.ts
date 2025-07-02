@@ -10,7 +10,7 @@ export const generateRostersPDF = (data: any, name: string) => {
   const pageWidth = doc.internal.pageSize.getWidth()
   const padding = 10
 
-  data.forEach((roster, index) => {
+  data.forEach((roster: any, index: number) => {
     // Начинаем с новой страницы, кроме первой
     if (index > 0) {
       doc.addPage()
