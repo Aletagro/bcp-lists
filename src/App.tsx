@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import TournamentCard from './components/TournamentCard'
+import config from './AppConfig'
 
 function App() {
   const [token, setToken] = useState('')
@@ -15,7 +16,7 @@ function App() {
     setLoading(true)
     setError('')
     try {
-      const response = await fetch(`https://bcp-server.onrender.com/api/tournaments?token=${encodeURIComponent(token)}`)
+      const response = await fetch(`${config.url}api/tournaments?token=${encodeURIComponent(token)}`)
       if (!response.ok) {
         const errData = await response.json()
         throw new Error(JSON.stringify(errData))

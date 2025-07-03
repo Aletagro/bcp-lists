@@ -1,5 +1,6 @@
 import {useState} from 'react'
-import {generateRostersPDF} from '../utils/utilities'
+import {generateRostersPDF, generateRoundPDF} from '../utils/utilities'
+import config from '../AppConfig'
 
 type Props = {
   tournament: any,
@@ -7,7 +8,8 @@ type Props = {
 }
 
 export default function TournamentCard({tournament, token}: Props) {
-  const [loading, setLoading] = useState(false)
+  const [loadingLists, setLoadingList] = useState(false)
+  const [loadingPairings, setLoadingPairings] = useState(false)
   const [leftSeconds, setSeftSeconds] = useState(0)
   let countdownInterval: any
 
@@ -23,11 +25,15 @@ export default function TournamentCard({tournament, token}: Props) {
     }, 1000)
   }
 
+  const createArray = (length) => {
+    return Array.from({length}, (_, i) => i + 1)
+  }
+
   const handleClick = async () => {
-    setLoading(true)
+    setLoadingList(true)
     startCountdown(tournament.players * 3)
     try {
-      const response = await fetch(`https://bcp-server.onrender.com/api/lists?id=${tournament.id}&token=${encodeURIComponent(token)}`)
+      const response = await fetch(`${config.url}api/lists?id=${tournament.id}&token=${encodeURIComponent(token)}`)
       const data = await response.json()
       generateRostersPDF(data, tournament.name)
     } catch (err) {
@@ -37,10 +43,29 @@ export default function TournamentCard({tournament, token}: Props) {
         console.error('Неизвестная ошибка');
       }
     } finally {
-      setLoading(false)
+      setLoadingList(false)
       setSeftSeconds(0)
     }
   }
+
+  const handleClickRound = (round) => async () => {
+    setLoadingPairings(true)
+    try {
+      const response = await fetch(`${config.url}api/round?tournamentId=${tournament.id}&round=${round}&token=${encodeURIComponent(token)}`)
+      const data = await response.json()
+      generateRoundPDF(data, tournament.name, round)
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(err.message);
+      } else {
+        console.error('Неизвестная ошибка');
+      }
+    }finally {
+      setLoadingPairings(false)
+    }
+  }
+
+  const renderRound = (round) => <button key={round} onClick={handleClickRound(round)} disabled={loadingPairings} style={Styles.round}>{round}</button>
 
   return <div style={Styles.container}>
     <h3>{tournament.name}</h3>
@@ -50,7 +75,16 @@ export default function TournamentCard({tournament, token}: Props) {
     <p style={Styles.p}><strong>Организатор:</strong> {tournament.owner}</p>
     <p style={Styles.p}><strong>Игроки:</strong> {tournament.players}/{tournament.numTickets}</p>
     <p style={Styles.p}><strong>Статус:</strong> {tournament.ended ? 'Окончен' : 'Активен'}</p>
-    <button style={Styles.button} onClick={handleClick} disabled={loading}>{loading ? `Загрузка` : 'Скачать Листы'}</button>
+    {tournament.currentRound
+      ? <>
+        <b>Скачать паринги раунда</b>
+        <div style={Styles.row}>
+          {createArray(tournament.currentRound).map(renderRound)}
+        </div>
+      </>
+      : null
+    }
+    <button style={Styles.button} onClick={handleClick} disabled={loadingLists}>{loadingLists ? `Загрузка` : 'Скачать Листы'}</button>
     {leftSeconds > 0 ? <p>До конца скачивания осталось примерно {leftSeconds} секунд</p> : null}
   </div>
 }
@@ -65,5 +99,7 @@ const Styles = {
     boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
   },
   p: {marginBottom: 12, marginTop: 0},
-  button: {backgroundColor: 'lightblue', color: 'black'}
+  button: {backgroundColor: 'lightblue', color: 'black'},
+  row: {display: 'flex', justifyContent: 'space-between', paddingBottom: 16, paddingTop: 8},
+  round: {flex: 1, textAlign: 'center', marginLeft: 4, marginright: 4}
 }
