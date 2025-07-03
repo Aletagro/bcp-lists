@@ -189,7 +189,7 @@ export const generateRoundPDF = async (
   document.body.removeChild(tableContainer)
 }
 
-const transliterate = (text) => {
+const transliterate = (text: string) => {
   const map = {
     // Строчные буквы
     'а': 'a',    'б': 'b',    'в': 'v',    'г': 'g',    'д': 'd',
@@ -209,5 +209,5 @@ const transliterate = (text) => {
     'Э': 'E',    'Ю': 'Yu',   'Я': 'Ya'
   };
   return text
-    .replace(/[а-яА-ЯёЁ]/g, char => map[char] || char)
+    .replace(/[а-яА-ЯёЁ]/g, (char: string) => map[char] || char)
 }

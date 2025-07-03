@@ -25,7 +25,7 @@ export default function TournamentCard({tournament, token}: Props) {
     }, 1000)
   }
 
-  const createArray = (length) => {
+  const createArray = (length: number) => {
     return Array.from({length}, (_, i) => i + 1)
   }
 
@@ -48,7 +48,7 @@ export default function TournamentCard({tournament, token}: Props) {
     }
   }
 
-  const handleClickRound = (round) => async () => {
+  const handleClickRound = (round: number) => async () => {
     setLoadingPairings(true)
     try {
       const response = await fetch(`${config.url}api/round?tournamentId=${tournament.id}&round=${round}&token=${encodeURIComponent(token)}`)
@@ -65,7 +65,7 @@ export default function TournamentCard({tournament, token}: Props) {
     }
   }
 
-  const renderRound = (round) => <button key={round} onClick={handleClickRound(round)} disabled={loadingPairings} style={Styles.round}>{round}</button>
+  const renderRound = (round: number) => <button key={round} onClick={handleClickRound(round)} disabled={loadingPairings} style={Styles.round}>{round}</button>
 
   return <div style={Styles.container}>
     <h3>{tournament.name}</h3>
@@ -101,5 +101,5 @@ const Styles = {
   p: {marginBottom: 12, marginTop: 0},
   button: {backgroundColor: 'lightblue', color: 'black'},
   row: {display: 'flex', justifyContent: 'space-between', paddingBottom: 16, paddingTop: 8},
-  round: {flex: 1, textAlign: 'center', marginLeft: 4, marginright: 4}
+  round: {flex: 1,  marginLeft: 4, marginright: 4}
 }
