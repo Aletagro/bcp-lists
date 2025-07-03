@@ -117,7 +117,7 @@ export const generateRoundPDF = async (
     tdTable.style.padding = '6px'
 
     const tdFirst = document.createElement('td')
-    tdFirst.innerHTML = `<strong>${p.firstPlayer}</strong><br><small style="color:#666">${p.firstPlayerFaction}</small>`
+    tdFirst.innerHTML = `<strong>${p.firstPlayer || ''}</strong><br><small style="color:#666">${p.firstPlayerFaction || ''}</small>`
     tdFirst.style.border = '1px solid #ccc'
     tdFirst.style.padding = '6px'
 
@@ -129,7 +129,7 @@ export const generateRoundPDF = async (
     tdResult.style.padding = '6px'
 
     const tdSecond = document.createElement('td')
-    tdSecond.innerHTML = `<strong>${p.secondPlayer}</strong><br><small style="color:#666">${p.secondPlayerFaction}</small>`
+    tdSecond.innerHTML = `<strong>${p.secondPlayer || ''}</strong><br><small style="color:#666">${p.secondPlayerFaction || ''}</small>`
     tdSecond.style.border = '1px solid #ccc'
     tdSecond.style.padding = '6px'
 
